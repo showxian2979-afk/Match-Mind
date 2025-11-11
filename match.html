@@ -1,16 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Match System | Match-Mind</title>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Match | Match-Mind</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h2>Find Your Match</h2>
-  <p>Click the button below to find people with similar hobbies and interests.</p>
+  <!-- 导航同上 -->
+  <nav class="navbar navbar-expand-lg bg-light border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">Match-Mind</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="catalogue.html">Catalogue</a></li>
+          <li class="nav-item"><a class="nav-link active" href="match.html">Match</a></li>
+          <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
+          <li class="nav-item"><a class="nav-link" href="reviews.html">Reviews</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="btn btn-primary ms-lg-3" href="login.html">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-  <button onclick="alert('You matched with Alice! 🎉')">Find Match</button>
+  <main class="container py-4">
+    <h1 class="h3 mb-3">Quick Match</h1>
+    <p class="text-secondary">We’ll recommend people who share similar hobbies.</p>
 
-  <br><br>
-  <a href="index.html">Back to Home</a>
+    <div class="row" id="results"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const me = { // 假设当前用户（演示用）
+      id:"me", name:"You", age:26, city:"Sydney", gender:"F",
+      hobbies:["Yoga","Travel","Movies"]
+    };
+    const others = window.DEMO_USERS;
+    const ranked = others
+      .map(o => ({...o, score: getMatchScore(me, o)}))
+      .sort((a,b)=>b.score-a.score);
+
+    const box = document.getElementById('results');
+    box.innerHTML = ranked.map(u => `
+      <div class="col-md-4 col-lg-3 mb-4">
+        <div class="card shadow-sm card-user">
+          <img src="${u.img}" alt="${u.name}">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title mb-1">${u.name} · ${u.age}</h5>
+              <span class="badge text-bg-success">Score ${u.score}</span>
+            </div>
+            <div class="text-muted small mb-2">${u.city} · ${u.gender}</div>
+            ${u.hobbies.map(h=>`<span class="badge text-bg-secondary badge-tag">${h}</span>`).join("")}
+            <a class="btn btn-primary w-100 mt-3" href="chat.html">Start Chat</a>
+          </div>
+        </div>
+      </div>`).join("");
+  </script>
 </body>
 </html>
